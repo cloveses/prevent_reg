@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>list</title>
+</head>
+<body>
+    <ul>
+        {%for people in peoples%}
+        <table>
+            <tr>
+                <td>ID</td>
+                <td>name</td>
+                <td>idcode</td>
+                <td>address</td>
+                <td>phone</td>
+                <td>src_address</td>
+                <td>back_date</td>
+                <td>is_fever</td>
+                <td>memo</td>
+                <td>reg_date</td>
+            </tr>
+            <tr>
+                <td>{{people.get('id')}}</td>
+                <td>{{people.get('name')}}</td>
+                <td>{{people.get('idcode')}}</td>
+                <td>{{people.get('address')}}</td>
+                <td>{{people.get('phone')}}</td>
+                <td>{{people.get('src_address')}}</td>
+                <td>{{people.get('back_date')}}</td>
+                <td>{{people.get('is_fever')}}</td>
+                <td>{{people.get('memo')}}</td>
+                <td>{{people.get('reg_date')}}</td>
+            </tr>
+        </table>
+        {%endfor%}
+    </ul>
+</body>
+</html>

@@ -27,6 +27,13 @@ db.generate_mapping(create_tables=True)
 def add_people(params):
     People(**params)
 
+@db_session
+def lookup():
+    ps = People.select().order_by(desc(People.reg_date))[:10]
+    if ps:
+        return [p.to_dict() for p in ps]
+    return []
+
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     if request.method == 'GET':
@@ -51,6 +58,11 @@ def hello_world():
         else:
             add_people(params)
             return render_template('success.html')
+
+@app.route('/dis')
+def display():
+    peoples = lookup()
+    return render_template('display.html', peoples=peoples)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
