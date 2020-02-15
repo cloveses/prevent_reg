@@ -9,13 +9,13 @@ app.secret_key = 'abck&&&((%^%^jjjhhku76993KJH'
 
 db = Database()
 class People(db.Entity):
-    name = Required(str)
-    idcode = Required(str)
+    name = Optional(str)
+    idcode = Optional(str)
     address = Required(str)
-    phone = Required(str)
-    src_address = Required(str)
-    back_date = Required(str)
-    is_fever = Required(str)
+    phone = Optional(str)
+    src_address = Optional(str)
+    back_date = Optional(str)
+    is_fever = Optional(str)
     memo = Optional(str)
     reg_date = Required(datetime.datetime, default=datetime.datetime.now)
 
@@ -52,7 +52,7 @@ def hello_world():
             if v:
                 params[key] = v
         # print(params)
-        if ('memo' in params and len(params) < 8) or len(params) < 7:
+        if not 'src_address' in params:
             session['info'] = '信息填写不完整，请重新填写！'
             return redirect('/')
         else:
