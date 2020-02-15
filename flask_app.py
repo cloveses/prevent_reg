@@ -52,7 +52,7 @@ def hello_world():
             if v:
                 params[key] = v
         # print(params)
-        if not 'src_address' in params:
+        if not 'address' in params:
             session['info'] = '信息填写不完整，请重新填写！'
             return redirect('/')
         else:
