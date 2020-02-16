@@ -4,6 +4,10 @@
     <title>list</title>
 </head>
 <body>
+    <h2>最新信息</h2>
+    {%if not people%}
+    <h3>暂无信息</h3>
+    {%endif%}
     <ul>
         {%for people in peoples%}
         <table>
