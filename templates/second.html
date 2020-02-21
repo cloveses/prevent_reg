@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+    <title>凤凰国际城南区51号楼</title>
+    <script type="text/javascript"  src="{{url_for('static',filename='zepto.min.js')}}"></script>
+</head>
+<body>
+    <table id="tab-one">
+        <tr>
+            <th>工作单位及职务</th>
+            <th>姓名</th>
+            <th>学历</th>
+            <th>身份证号码</th>
+            <th>联系电话</th>
+            <th>政治面貌</th>
+            <th>职业</th>
+            <th>其他情况</th>
+            <th>备注</th>
+        </tr>
+        <tr id="clone-tr">
+            <td><input type="text" name="work_place" placeholder="工作单位及职务"></td>
+            <td><input type="text" name="name" placeholder="姓名"></td>
+            <td>
+                <select name="education">
+                    <option value="" disabled selected>学历</option>
+                    <option value="小学">小学</option>
+                    <option value="初中">初中</option>
+                    <option value="高中(中专)">高中(中专)</option>
+                    <option value="大专">大专</option>
+                    <option value="本科">本科</option>
+                    <option value="研究生">研究生</option>
+                    <option value="博士">博士</option>
+                </select>
+            </td>
+            <td><input type="text" name="idcode" placeholder="身份证号码"></td>
+            <td><input type="text" name="phone" placeholder="联系电话"></td>
+            <td>
+                <select name="politic">
+                    <option value="" disabled selected>政治面貌</option>
+                    <option value="群众">群众</option>
+                    <option value="团员">团员</option>
+                    <option value="党员(预备党员)">党员(预备党员)</option>
+                </select>
+            </td>
+            <td>
+                <select name="occupation">
+                    <option value="" disabled selected>职业</option>
+                    <option value="1">机关事业单位职工</option>
+                    <option value="2">企业单位管理人员</option>
+                    <option value="3">医护人员</option>
+                    <option value="4">律师</option>
+                    <option value="5">教师</option>
+                    <option value="6">村/社区干部(后备干部)</option>
+                    <option value="7">自主创业</option>
+                    <option value="8">在外务工</option>
+                </select>
+            </td>
+            <td>
+                <select name="other">
+                    <option value="" disabled selected>其他情况</option>
+                    <option value="1">退伍军人</option>
+                    <option value="2">志愿者</option>
+                    <option value="3">疫情期间网格员(长)</option>
+                    <option value="4">疫情期间临时党支部书记</option>
+                </select>
+            </td>
+            <td><input type="text" name="memo" placeholder="备注"></td>
+        </tr>
+    </table>
+    <button id="add_tab1">增加一人</button><button id="save_all">全部保存</button>
+    <div id='info'></div>
+    <script type="text/javascript">
+        $(function () {
+            $('body').on('click', '#add_tab1', function(){
+                $('#clone-tr').clone(true).appendTo($("#tab-one"))
+            });
+
+
+            $('body').on('click', '#save_all', function(){
+                var datas = [];
+                var flag = true;
+                $('tr#clone-tr', '#tab-one').each(function(i, el){
+                    var data = {};
+                    $('td', this).each(function(j, ele){
+                        // alert($(this).children().first().val());
+                        // alert($(this).children().first().attr('name'));
+                        v = $(this).children().first().val();
+                        attribute = $(this).children().first().attr('name');
+                        if (v == undefined || v == '' && attribute != 'memo'){
+                            alert('第'+(i+1)+'行,第'+(j+1)+'列未输入');
+                            flag = false;
+                            return false;
+                        }else{
+                            data[attribute] = v;
+                        };
+                    });
+                    datas.push(data);
+                });
+                if (flag){
+                    console.log(datas);
+                    $.each(datas, function(i, ds){
+                        // alert(ds);
+                        $.ajax({
+                            url: "/second",
+                            dataType: "json",
+                            type: 'post',
+                            data: ds,
+                            success: function(data){
+                                if (data['status'] == 0){
+                                    $("#info").append($("<h4>第" + (i+1) + '行-' + ds['name'] + "-保存成功!</h4>"));
+                                }else{
+                                    $("#info").append($("<h4>第" + (i+1) + '行-' + ds['name'] + '-' + data['msg'] + "保存失败!</h4>"));
+                                };
+                            },
+                            error: function(xhr, type){alert('ajax error!')},
+                        });
+                    });
+                    alert('谢谢合作!');
+                    $('#save_all').attr('disabled',true);
+                };
+            });
+
+        });
+    </script>
+</body>
+</html>
