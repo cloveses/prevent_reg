@@ -64,6 +64,14 @@ def lookup():
         return [p.to_dict() for p in ps]
     return []
 
+@db_session
+def lookup_sec_people():
+    ps = SecPeople.select().order_by(desc(SecPeople.reg_date))[:10]
+    if ps:
+        return [p.to_dict() for p in ps]
+    return []
+
+
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     if request.method == 'GET':
@@ -93,6 +101,12 @@ def hello_world():
 def display():
     peoples = lookup()
     return render_template('display.html', peoples=peoples)
+
+@app.route('/s')
+def displaysec():
+    peoples = lookup_sec_people()
+    return render_template('display_sec.html', peoples=peoples)
+
 
 @app.route('/second', methods=['GET', 'POST'])
 def second():
